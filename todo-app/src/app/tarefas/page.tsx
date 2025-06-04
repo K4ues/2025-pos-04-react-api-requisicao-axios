@@ -1,76 +1,50 @@
 "use client"
 
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+import { useEffect, useState } from "react"
+import axios from "axios"
 
-interface Todo {
+interface Tarefa {
   id: number
   todo: string
   completed: boolean
   userId: number
 }
 
-export default function TodosPage() {
-  const [todos, setTodos] = useState<Todo[]>([])
-  const [loading, setLoading] = useState<boolean>(true)
+export default function TarefasPage() {
+  const [tarefas, setTarefas] = useState<Tarefa[]>([])
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchTodos = async () => {
+    const fetchTarefas = async () => {
       try {
-        const response = await axios.get('https://dummyjson.com/todos')
-        setTodos(response.data.todos)
+        const response = await axios.get("https://dummyjson.com/todos")
+        setTarefas(response.data.todos)
       } catch (err) {
-        setError('Failed to fetch todos')
         console.error(err)
+        setError("Erro ao carregar tarefas")
       } finally {
         setLoading(false)
       }
     }
 
-    fetchTodos()
+    fetchTarefas()
   }, [])
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="text-red-500 text-xl">{error}</div>
-      </div>
-    )
-  }
+  if (loading) return <p className="p-4">Carregando tarefas...</p>
+  if (error) return <p className="p-4 text-red-500">{error}</p>
 
   return (
-    <div className="min-h-screen bg-gray-100 py-8">
-      <div className="max-w-2xl mx-auto px-4">
-        <h1 className="text-3xl font-bold text-gray-800 mb-6">Lista de Tarefas</h1>
-        <div className="bg-white shadow-md rounded-lg overflow-hidden">
-          <ul className="divide-y divide-gray-200">
-            {todos.map((todo) => (
-              <li key={todo.id} className="p-4 hover:bg-gray-50">
-                <div className="flex items-center">
-                  <input
-                    type="checkbox"
-                    checked={todo.completed}
-                    readOnly
-                    className="h-4 w-4 text-blue-600 rounded mr-3"
-                  />
-                  <span className={`${todo.completed ? 'line-through text-gray-400' : 'text-gray-800'}`}>
-                    {todo.todo}
-                  </span>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
+    <div className="p-8">
+      <h1 className="text-2xl font-bold mb-4">Lista de Tarefas</h1>
+      <ul className="space-y-2">
+        {tarefas.map(tarefa => (
+          <li key={tarefa.id} className="bg-white p-4 rounded shadow">
+            <input type="checkbox" checked={tarefa.completed} readOnly className="mr-2" />
+            {tarefa.todo}
+          </li>
+        ))}
+      </ul>
     </div>
   )
 }
