@@ -12,6 +12,8 @@ interface TarefaProps {
     concluido?: boolean;
 }
 
+
+
 const Tarefa: React.FC<TarefaProps> = ({ titulo, concluido }) => {
     const [estaConcluido, setEstaConcluido] = useState(concluido);
 
@@ -52,6 +54,7 @@ const Tarefas: React.FC<{ dados: TarefaInterface[] }> = ({ dados }) => {
   );
 };
 
+
 const Home = () => {
     const [tarefas, setTarefas] = useState<TarefaInterface[]>(dados);
     const [modalAberto, setModalAberto] = useState(false);
@@ -67,7 +70,10 @@ const Home = () => {
 
     return (
         <div className="container mx-auto p-4">
+            
             <Cabecalho />
+            <a className="text-bold text-white underline mr-4"  href="/tarefas">Acesse a lista de tarefas</a>
+            
             <button
                 className="bg-blue-600 text-white px-4 py-2 rounded mb-4"
                 onClick={() => setModalAberto(true)}
